@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:forehead/const.dart';
+import 'package:forehead/store.dart';
 
 // TODO: надо написать тестов
 
@@ -34,20 +35,28 @@ class _StartPage extends State<StartPage> {
         title: Text("FOREHEAD", textAlign: TextAlign.center, style: styleTextAppBar,),
         backgroundColor: colorBGAppBar,
       ),
-      body: Column(
-        children: <Widget> [
-          Expanded(child: Row(
-            children: <Widget> [Expanded(child: SelectThemeButton()), Expanded(child: SelectThemeButton())],
-          )),
-          Expanded(child: Row(
-            children: <Widget> [Expanded(child: SelectThemeButton()), Expanded(child: SelectThemeButton())],
-          )),
-          Expanded(child: Row(
-            children: <Widget> [Expanded(child: SelectThemeButton()), Expanded(child: SelectThemeButton())],
-          )),
-          StoreInButton(),
-        ],
-      ),
+      body: StartPageBody(),
+    );
+  }
+}
+
+// StartPageBody разметка тела стартовой страницы.
+class StartPageBody extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget> [
+        Expanded(child: Row(
+          children: <Widget> [Expanded(child: SelectThemeButton()), Expanded(child: SelectThemeButton())],
+        )),
+        Expanded(child: Row(
+          children: <Widget> [Expanded(child: SelectThemeButton()), Expanded(child: SelectThemeButton())],
+        )),
+        Expanded(child: Row(
+          children: <Widget> [Expanded(child: SelectThemeButton()), Expanded(child: SelectThemeButton())],
+        )),
+        StoreInButton(),
+      ],
     );
   }
 }
@@ -62,27 +71,6 @@ class SelectThemeButton extends StatelessWidget {
         decoration: BoxDecoration(
           // TODO: перевести на картинку для каждой темы
           color: colorSelectThemeButton,
-          borderRadius: BorderRadius.all(Radius.circular(30)),
-        ),
-      ),
-    );
-  }
-}
-
-// StoreInButton кнопка магазина.
-// TODO: сделать кнопку жирнее.
-class StoreInButton extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-    child: Container(
-        height: 50,
-        child: Center(
-          child: Text("ПРИКУПИТЬ БОЛЬШЕ СЛОВ", style: styleTextInStoreButton,),
-        ),
-        margin: EdgeInsets.only(bottom: 20, top: 10, left: 30, right: 30),
-        decoration: BoxDecoration(
-          color: colorInStoreButton,
           borderRadius: BorderRadius.all(Radius.circular(30)),
         ),
       ),

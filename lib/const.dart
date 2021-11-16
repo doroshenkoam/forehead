@@ -10,7 +10,7 @@ const colorBGAppBar = Color(0xFF111320);
 // styleTextAppBar стиль текста app бара.
 const styleTextAppBar = TextStyle(
   fontSize: 18.0,
-  color: Color(0xAA999911),
+  color: Colors.amber,
 );
 
 // colorSelectThemeButton цвет кнопок выбора тем.
@@ -23,5 +23,5 @@ const colorInStoreButton = Color(0xAD940123);
 const styleTextInStoreButton = TextStyle(
   fontSize: 20.0,
   wordSpacing: 8,
-  color: Color(0xAA999911),
+  color: Colors.amber,
 );
