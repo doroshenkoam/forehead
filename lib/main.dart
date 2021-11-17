@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:forehead/const.dart';
 import 'package:forehead/store.dart';
+import 'package:forehead/game.dart';
 
 // TODO: надо написать тестов
 
@@ -61,19 +62,4 @@ class StartPageBody extends StatelessWidget {
   }
 }
 
-// SelectThemeButton кнопка темы.
-class SelectThemeButton extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      child: Container(
-        margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-        decoration: BoxDecoration(
-          // TODO: перевести на картинку для каждой темы
-          color: colorSelectThemeButton,
-          borderRadius: BorderRadius.all(Radius.circular(30)),
-        ),
-      ),
-    );
-  }
-}
+
