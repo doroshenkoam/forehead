@@ -9,14 +9,18 @@ class StoreInButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(
-          builder: (context) => StoreStartPage()),
-      );
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => StoreStartPage()),
+        );
       },
       child: Container(
         height: 50,
         child: Center(
-          child: Text("ПРИКУПИТЬ БОЛЬШЕ СЛОВ", style: styleTextInStoreButton,),
+          child: Text(
+            "ПРИКУПИТЬ БОЛЬШЕ СЛОВ",
+            style: styleTextInStoreButton,
+          ),
         ),
         margin: EdgeInsets.only(bottom: 20, top: 10, left: 30, right: 30),
         decoration: BoxDecoration(
@@ -34,17 +38,29 @@ class StoreStartPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: colorBG,
-        appBar: AppBar(
+      appBar: AppBar(
         centerTitle: true,
-        title: Text("FOREHEAD", textAlign: TextAlign.center, style: styleTextAppBar,),
+        title: Text(
+          "FOREHEAD",
+          textAlign: TextAlign.center,
+          style: styleTextAppBar,
         ),
+      ),
       body: Column(
-        children: <Widget> [
-          Expanded(child: Row(
-            children: <Widget> [Expanded(child: BuyBatchWordsButton()), Expanded(child: BuyBatchWordsButton())],
+        children: <Widget>[
+          Expanded(
+              child: Row(
+            children: <Widget>[
+              Expanded(child: BuyBatchWordsButton()),
+              Expanded(child: BuyBatchWordsButton())
+            ],
           )),
-          Expanded(child: Row(
-            children: <Widget> [Expanded(child: BuyBatchWordsButton()), Expanded(child: BuyBatchWordsButton())],
+          Expanded(
+              child: Row(
+            children: <Widget>[
+              Expanded(child: BuyBatchWordsButton()),
+              Expanded(child: BuyBatchWordsButton())
+            ],
           )),
         ],
       ),
