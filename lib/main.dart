@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:forehead/const.dart';
 import 'package:forehead/game.dart';
+import 'package:forehead/list.dart';
 import 'package:forehead/store.dart';
 
 // TODO: надо написать тестов
@@ -54,24 +55,37 @@ class StartPageBody extends StatelessWidget {
         Expanded(
             child: Row(
           children: <Widget>[
-            Expanded(child: SelectThemeButton()),
-            Expanded(child: SelectThemeButton())
+            Expanded(
+                child: SelectThemeButton(
+              wordList: WordsPack1.words,
+            )),
+            Expanded(
+                child: SelectThemeButton(
+              wordList: WordsPack2.words,
+            ))
           ],
         )),
         Expanded(
             child: Row(
           children: <Widget>[
-            Expanded(child: SelectThemeButton()),
-            Expanded(child: SelectThemeButton())
+            Expanded(
+                child: SelectThemeButton(
+              wordList: WordsPack3.words,
+            )),
+            Expanded(
+                child: SelectThemeButton(
+              wordList: WordsPack4.words,
+            ))
           ],
         )),
-        Expanded(
-            child: Row(
-          children: <Widget>[
-            Expanded(child: SelectThemeButton()),
-            Expanded(child: SelectThemeButton())
-          ],
-        )),
+        // TODO: временно отключены
+        // Expanded(
+        //     child: Row(
+        //   children: <Widget>[
+        //     Expanded(child: SelectThemeButton()),
+        //     Expanded(child: SelectThemeButton())
+        //   ],
+        // )),
         StoreInButton(),
       ],
     );

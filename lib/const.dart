@@ -25,3 +25,9 @@ const styleTextInStoreButton = TextStyle(
   wordSpacing: 8,
   color: Colors.amber,
 );
+
+// styleTextWordCard стиль текста для карточек слов.
+const styleTextWordCard = TextStyle(
+  fontSize: 40.0,
+  color: Colors.amber,
+);
