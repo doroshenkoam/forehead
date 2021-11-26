@@ -52,6 +52,7 @@ class GamePage extends StatefulWidget {
 
 // GamePage страничка игры.
 class _GamePage extends State<GamePage> {
+  StreamSubscription? _accel;
   Timer? _timer;
   // TODO: в передаваемые параметры
   late int _start = 120;
@@ -69,8 +70,11 @@ class _GamePage extends State<GamePage> {
   var _scoreFail = 0;
   var _scoreStr = '0';
 
-  final successDirectY = 5.0;
-  final failDirectY = -5.0;
+  final baseDirect = 9.81;
+  final rotateDirectY = 4.0;
+
+  var testX = 0.0;
+  var testXText = '';
 
   @override
   void initState() {
@@ -83,26 +87,38 @@ class _GamePage extends State<GamePage> {
     ]);
 
     // отслеживание датчика акселерометра
-    // TODO: надо ли вырубать прослушивальщика?
-    gyroscopeEvents.listen((GyroscopeEvent event) {
-      setState(() {
-        if (event.x >= successDirectY) {
-          // слово угадано
-          _addScoreSuccess();
-          _recalculateScore();
-          _getWordCard();
-        } else if (event.x <= failDirectY) {
-          // слово не угадано
-          _addScoreFail();
-          _recalculateScore();
-          _getWordCard();
-        }
+    if (_accel == null) {
+      _accel = accelerometerEvents.listen((AccelerometerEvent event) {
+        setState(() {
+          // if (event.x >= successDirectY) {
+          //   // слово угадано
+          //   _addScoreSuccess();
+          //   _recalculateScore();
+          //   _getWordCard();
+          // } else if (event.x <= failDirectY) {
+          //   // слово не угадано
+          //   _addScoreFail();
+          //   _recalculateScore();
+          //   _getWordCard();
+          // }
+          testX = event.x;
+          testXText = '$testX';
+        });
       });
-    });
+    } else {
+      _accel!.resume();
+    }
 
     _calculateTime();
     _startTimer();
     _getWordCard();
+  }
+
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
   }
 
   // _getWordCard получение новых карточек.
@@ -111,7 +127,7 @@ class _GamePage extends State<GamePage> {
     setState(() {
       var _indexElemList = _random.nextInt(widget.wordList.length);
 
-      _wordCard = widget.wordList[_random.nextInt(_indexElemList)];
+      _wordCard = widget.wordList[_indexElemList];
 
       widget.wordList.remove(_indexElemList);
     });
@@ -166,6 +182,8 @@ class _GamePage extends State<GamePage> {
   // dispose дроп таймера при выходе.
   @override
   void dispose() {
+    super.dispose();
+
     // разблокируем поворот экрана
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeRight,
@@ -174,10 +192,12 @@ class _GamePage extends State<GamePage> {
       DeviceOrientation.portraitDown,
     ]);
 
-    super.dispose();
     if (_timer != null) {
       _timer!.cancel();
       _start = 120;
+    }
+    if (_accel != null) {
+      _accel!.cancel();
     }
   }
 
@@ -225,8 +245,8 @@ class _GamePage extends State<GamePage> {
                         ),
                         Positioned(
                           child: Text(
-                            _scoreStr,
-                            style: styleTextWordCard,
+                            testXText,
+                            style: styleTextInStoreButton,
                           ),
                         ),
                       ],
