@@ -31,3 +31,5 @@ const styleTextWordCard = TextStyle(
   fontSize: 40.0,
   color: Colors.amber,
 );
+
+const gameFinishText = "ИГРА ЗАКОНЧЕНА!";

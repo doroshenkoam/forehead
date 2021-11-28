@@ -54,15 +54,14 @@ class GamePage extends StatefulWidget {
 class _GamePage extends State<GamePage> {
   StreamSubscription? _accel;
   Timer? _timer;
+  // TODO: в передаваемые параметры.
+  late int _restOfTime = 120;
   // TODO: в передаваемые параметры
-  late int _start = 120;
-  // TODO: в передаваемые параметры
-  late int _baseStart = 120;
+  late int _gameSessionTime = 120;
   var _timerStr = '';
   var _percent = 1.0;
 
   var _wordCard = '';
-  // набор слов (временное решение до перевода на базу)
   final _random = new Random();
 
   var _progress = 1.0;
@@ -70,11 +69,8 @@ class _GamePage extends State<GamePage> {
   var _scoreFail = 0;
   var _scoreStr = '0';
 
-  final baseDirect = 9.81;
+  final baseDirect = 0.0;
   final rotateDirectY = 4.0;
-
-  var testX = 0.0;
-  var testXText = '';
 
   @override
   void initState() {
@@ -86,23 +82,23 @@ class _GamePage extends State<GamePage> {
       DeviceOrientation.landscapeLeft,
     ]);
 
+    // TODO: промежуточный виджет с отсчетом.
+
     // отслеживание датчика акселерометра
     if (_accel == null) {
-      _accel = accelerometerEvents.listen((AccelerometerEvent event) {
+      _accel = gyroscopeEvents.listen((GyroscopeEvent event) {
         setState(() {
-          // if (event.x >= successDirectY) {
-          //   // слово угадано
-          //   _addScoreSuccess();
-          //   _recalculateScore();
-          //   _getWordCard();
-          // } else if (event.x <= failDirectY) {
-          //   // слово не угадано
-          //   _addScoreFail();
-          //   _recalculateScore();
-          //   _getWordCard();
-          // }
-          testX = event.x;
-          testXText = '$testX';
+          if (baseDirect - rotateDirectY >= event.y) {
+            // слово угадано
+            _addScoreSuccess();
+            _recalculateScore();
+            _getWordCard();
+          } else if (baseDirect + rotateDirectY <= event.y) {
+            // слово не угадано
+            _addScoreFail();
+            _recalculateScore();
+            _getWordCard();
+          }
         });
       });
     } else {
@@ -122,22 +118,40 @@ class _GamePage extends State<GamePage> {
   }
 
   // _getWordCard получение новых карточек.
+  // Если таймер закончился, засчитаем последнее слово в копилку и все.
   // TODO: в будущем перевести на работу с базой.
   void _getWordCard() {
     setState(() {
+      if (_restOfTime == 0) {
+        // в подсчете очков сравнение будет идти именно с этой константой
+        _wordCard = gameFinishText;
+        return;
+      }
+
+      if (widget.wordList.length == 0) {
+        // TODO: пока заглушка, после будем предлагать купить новые слова.
+        _wordCard = gameFinishText;
+        return;
+      }
+
       var _indexElemList = _random.nextInt(widget.wordList.length);
 
       _wordCard = widget.wordList[_indexElemList];
 
-      widget.wordList.remove(_indexElemList);
+      widget.wordList.removeAt(_indexElemList);
     });
   }
 
   // _recalculateScore пересчет очков.
   void _recalculateScore() {
     setState(() {
-      _progress = _scoreSuccess / _scoreSuccess + _scoreFail;
-      _timerStr = '$_progress';
+      if (_wordCard != gameFinishText) {
+        if (_scoreFail != 0) {
+          _progress = _scoreSuccess / (_scoreFail + _scoreSuccess);
+        }
+
+        _scoreStr = '$_scoreSuccess';
+      }
     });
   }
 
@@ -158,10 +172,10 @@ class _GamePage extends State<GamePage> {
     _timer = new Timer.periodic(
       oneSec,
       (Timer timer) {
-        if (_start <= 0) {
+        if (_restOfTime <= 0) {
           timer.cancel();
         } else {
-          _start--;
+          _restOfTime--;
           _calculateTime();
         }
       },
@@ -170,11 +184,11 @@ class _GamePage extends State<GamePage> {
 
   // _calculateTime расчет строки таймера и обновление его отрисовки.
   void _calculateTime() {
-    var minuteStr = (_start ~/ 60).toString().padLeft(2, '0');
-    var secondStr = (_start % 60).toString().padLeft(2, '0');
+    var minuteStr = (_restOfTime ~/ 60).toString().padLeft(2, '0');
+    var secondStr = (_restOfTime % 60).toString().padLeft(2, '0');
 
     setState(() {
-      _percent = _start / _baseStart;
+      _percent = _restOfTime / _gameSessionTime;
       _timerStr = '$minuteStr:$secondStr';
     });
   }
@@ -194,7 +208,7 @@ class _GamePage extends State<GamePage> {
 
     if (_timer != null) {
       _timer!.cancel();
-      _start = 120;
+      _restOfTime = 120;
     }
     if (_accel != null) {
       _accel!.cancel();
@@ -245,8 +259,8 @@ class _GamePage extends State<GamePage> {
                         ),
                         Positioned(
                           child: Text(
-                            testXText,
-                            style: styleTextInStoreButton,
+                            _scoreStr,
+                            style: styleTextWordCard,
                           ),
                         ),
                       ],
