@@ -25,7 +25,7 @@ class _SelectThemeButtonState extends State<SelectThemeButton> {
           context,
           MaterialPageRoute(
             builder: (context) => GamePage(
-              wordList: widget.wordList,
+              wordList: new List<String>.from(widget.wordList),
             ),
           ),
         );
@@ -208,11 +208,13 @@ class _GamePage extends State<GamePage> {
 
     if (_timer != null) {
       _timer!.cancel();
-      _restOfTime = 120;
     }
     if (_accel != null) {
       _accel!.cancel();
     }
+
+    _restOfTime = 120;
+    _wordCard = '';
   }
 
   @override
