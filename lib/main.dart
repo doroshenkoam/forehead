@@ -57,11 +57,15 @@ class StartPageBody extends StatelessWidget {
           children: <Widget>[
             Expanded(
                 child: SelectThemeButton(
-              wordList: WordsPack1.words,
+              wordList: WordsPackMustPopularRu.words,
+              imagePath: 'assets/images/russian_1000.jpg',
+              themeName: "ПОПУЛЯРНЫЕ",
             )),
             Expanded(
                 child: SelectThemeButton(
-              wordList: WordsPack2.words,
+              wordList: WordsPackDifferent.words,
+              imagePath: 'assets/images/different.jpg',
+              themeName: "МИКС",
             ))
           ],
         )),
@@ -70,11 +74,15 @@ class StartPageBody extends StatelessWidget {
           children: <Widget>[
             Expanded(
                 child: SelectThemeButton(
-              wordList: WordsPack3.words,
+              wordList: WordsPackMustPopularEng.words,
+              imagePath: 'assets/images/english.jpg',
+              themeName: "АНГЛИЙСКИЕ",
             )),
             Expanded(
                 child: SelectThemeButton(
-              wordList: WordsPack4.words,
+              wordList: WordsPackCountries.words,
+              imagePath: 'assets/images/countries.jpg',
+              themeName: "СТРАНЫ",
             ))
           ],
         )),

@@ -8,8 +8,13 @@ import 'package:forehead/const.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
 class SelectThemeButton extends StatefulWidget {
-  SelectThemeButton({required this.wordList});
+  SelectThemeButton(
+      {required this.wordList,
+      required this.imagePath,
+      required this.themeName});
   final List<String> wordList;
+  final String imagePath;
+  final String themeName;
 
   @override
   _SelectThemeButtonState createState() => _SelectThemeButtonState();
@@ -33,10 +38,19 @@ class _SelectThemeButtonState extends State<SelectThemeButton> {
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
         decoration: BoxDecoration(
-          // TODO: перевести на картинку для каждой темы
+          image: DecorationImage(
+            // TODO: заменить на свои картинки.
+            image: AssetImage(widget.imagePath),
+            fit: BoxFit.fill,
+          ),
           color: colorSelectThemeButton,
           borderRadius: BorderRadius.all(Radius.circular(30)),
         ),
+        child: Center(
+            child: Text(
+          widget.themeName,
+          style: styleTextSelectThemeButton,
+        )),
       ),
     );
   }
@@ -61,16 +75,22 @@ class _GamePage extends State<GamePage> {
   var _timerStr = '';
   var _percent = 1.0;
 
+  // слова
   var _wordCard = '';
   final _random = new Random();
 
+  // очки
   var _progress = 1.0;
   var _scoreSuccess = 0;
   var _scoreFail = 0;
   var _scoreStr = '0';
 
+  // повороты
   final baseDirect = 0.0;
   final rotateDirectY = 4.0;
+
+  // переменная для пропуска потока из стрима
+  var _streamIsPause = false;
 
   @override
   void initState() {
@@ -88,16 +108,22 @@ class _GamePage extends State<GamePage> {
     if (_accel == null) {
       _accel = gyroscopeEvents.listen((GyroscopeEvent event) {
         setState(() {
-          if (baseDirect - rotateDirectY >= event.y) {
+          if (baseDirect - rotateDirectY >= event.y && !_streamIsPause) {
             // слово угадано
             _addScoreSuccess();
             _recalculateScore();
             _getWordCard();
-          } else if (baseDirect + rotateDirectY <= event.y) {
+
+            // кастомная остановка стрима
+            _streamSetPause();
+          } else if (baseDirect + rotateDirectY <= event.y && !_streamIsPause) {
             // слово не угадано
             _addScoreFail();
             _recalculateScore();
             _getWordCard();
+
+            // кастомная остановка стрима
+            _streamSetPause();
           }
         });
       });
@@ -115,6 +141,17 @@ class _GamePage extends State<GamePage> {
     if (mounted) {
       super.setState(fn);
     }
+  }
+
+  // _streamSetPause кастомная установка паузы для стрима.
+  // Необходимо ставить стрим на паузу и скипать в это время данные,
+  // стандартная пауза буферизирует данные.
+  void _streamSetPause() {
+    _streamIsPause = true;
+    // TODO: паузу в конфиг.
+    Future.delayed(Duration(milliseconds: 1200), () {
+      _streamIsPause = false;
+    });
   }
 
   // _getWordCard получение новых карточек.

@@ -33,3 +33,22 @@ const styleTextWordCard = TextStyle(
 );
 
 const gameFinishText = "ИГРА ЗАКОНЧЕНА!";
+
+// styleTextSelectThemeButton стиль текста кнопок выбора тем.
+const styleTextSelectThemeButton = TextStyle(
+  fontSize: 25.0,
+  color: Colors.amber,
+  fontWeight: FontWeight.bold,
+  shadows: <Shadow>[
+    Shadow(
+      offset: Offset(1.0, 1.0),
+      blurRadius: 3.0,
+      color: Color.fromARGB(255, 0, 0, 0),
+    ),
+    Shadow(
+      offset: Offset(1.0, 1.0),
+      blurRadius: 8.0,
+      color: Color.fromARGB(125, 0, 0, 255),
+    ),
+  ],
+);
